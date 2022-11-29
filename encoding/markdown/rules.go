@@ -22,10 +22,10 @@ func (r *HighlightedText) Rule(next godown.WalkFunc) (string, godown.WalkFunc) {
 		}
 
 		for _, attr := range node.Attr {
-			if attr.Key == "style" && strings.Contains(attr.Val, "-evernote-highlight:true") {
-				_, _ = fmt.Fprint(w, `<span style="background-color: #ffaaaa">`)
+			if attr.Key == "style" && strings.Contains(attr.Val, "-highlight:") {
+				_, _ = fmt.Fprint(w, "==")
 				next(node, w, nest, option)
-				_, _ = fmt.Fprint(w, "</span>")
+				_, _ = fmt.Fprint(w, "==")
 			} else {
 				next(node, w, nest, option)
 			}
