@@ -9,3 +9,5 @@ This is a fork of https://github.com/wormi4ok/evernote2md, please see that for i
 - allow spaces in filenames
 - url-escape resources (eg images), so that filenames can have spaces
 - add Obsidian-style highlighting: `==text to highlight==`
+- remove note's leading newlines
+- remove funky `<0xa0>` space characters
