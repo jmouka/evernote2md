@@ -112,7 +112,8 @@ func parseOne(h string, context *html.Node) *html.Node {
 }
 
 func resourceReference(res markdown.Resource) string {
-	return fmt.Sprintf(htmlFormat[res.Type], res.Type, res.Name, res.Name)
+	filename := strings.ReplaceAll(res.Name, " ", "%20")
+	return fmt.Sprintf(htmlFormat[res.Type], res.Type, filename, res.Name)
 }
 
 // Code replaces div tag stylized to look like code blocks with an actual <pre> tag

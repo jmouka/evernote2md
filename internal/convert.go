@@ -79,8 +79,9 @@ func (c *Converter) Convert(note *enex.Note) (*markdown.Note, error) {
 	c.normalizeHTML(note, md, NewReplacerMedia(md.Media), &Code{}, &ExtraDiv{}, &TextFormatter{}, &EmptyAnchor{})
 	c.toMarkdown(note, md)
 	c.prependTags(note, md)
-	c.prependTitle(note, md)
+	// c.prependTitle(note, md)
 	c.trimSpaces(note, md)
+	c.unescapeThings(md)
 	c.addDates(note, md)
 	if c.EnableFrontMatter {
 		c.addFrontMatter(note, md)
@@ -153,7 +154,25 @@ func (c *Converter) trimSpaces(_ *enex.Note, md *markdown.Note) {
 	}
 
 	md.Content = regexp.MustCompile(`\n{3,}`).ReplaceAllLiteral(md.Content, []byte("\n\n"))
+	md.Content = bytes.ReplaceAll(md.Content, []byte(" "), []byte(" "))
+	md.Content = bytes.TrimLeft(md.Content, "\n")
 	md.Content = append(bytes.TrimRight(md.Content, "\n"), '\n')
+}
+
+func (c *Converter) unescapeThings(md *markdown.Note) {
+	if c.err != nil {
+		return
+	}
+
+	result := []byte("")
+	slash := byte('\\')
+	for _, c := range md.Content {
+		// fmt.Print(c)
+		if c != slash {
+			result = append(result, c)
+		}
+	}
+	md.Content = result
 }
 
 func (c *Converter) addDates(note *enex.Note, md *markdown.Note) {
